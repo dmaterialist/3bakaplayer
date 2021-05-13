@@ -167,3 +167,9 @@
     -fx-font-family: "PT Sans";
 -fx-background-color: #131313;
 }
+
+.dialog-pane {
+    -fx-background-color: #131313;
+    -fx-padding: 0;
+}
+

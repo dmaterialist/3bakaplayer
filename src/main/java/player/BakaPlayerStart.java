@@ -9,9 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -117,6 +119,7 @@ public class BakaPlayerStart extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(BakaPlayerStart.class.getResource("/bakaplayer.fxml"));
         Parent root = loader.load();
+        primaryStage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
         Scene scene = new Scene(root, 400, 600);
         scene.heightProperty().addListener((observableValue, number, t1) -> windowHeight.setValue(t1));
         scene.widthProperty().addListener((observableValue, number, t1) -> {
@@ -141,7 +144,7 @@ public class BakaPlayerStart extends Application {
     public static void Link(Playlist playlist) {
         final Stage stage = new Stage();
         Dimension sSize = Toolkit.getDefaultToolkit().getScreenSize();
-
+        stage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
         stage.setX(sSize.width - playlist.getWidth());
         stage.setY(sSize.height - 55 - playlist.getHeight());
         WebView root = new WebView();
@@ -162,6 +165,7 @@ public class BakaPlayerStart extends Application {
     public static void NewPlaylist(Playlist playlist) {
         try {
             final Stage stage = new Stage();
+            stage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(BakaPlayerStart.class.getResource("/addPlaylist.fxml"));
             Parent root = loader.load();
@@ -201,6 +205,7 @@ public class BakaPlayerStart extends Application {
     public static void EditPlaylist(Playlist playlist) {
         try {
             final Stage stage = new Stage();
+            stage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
             FXMLLoader loader = new FXMLLoader();
             stage.setResizable(false);
             loader.setLocation(AddPlaylistController.class.getResource("/editPlaylist.fxml"));
@@ -220,8 +225,9 @@ public class BakaPlayerStart extends Application {
 
     private static void clonesAreRestricted() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Запрещено добавление одинаковых плейлистов");
-        alert.setContentText("Может, Вас удовлетворит редактирование имени этого плейлиста?");
+        alert.setHeaderText("Запрещено добавление одинаковых плейлистов");
+        alert.setTitle("Добавление не выполнено");
+        alert.setContentText("Но Вы можете отредактировать название плейлиста!");
         alert.showAndWait();
     }
 

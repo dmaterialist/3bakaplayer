@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Background;
@@ -14,6 +16,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 
+import java.io.File;
 import java.util.Optional;
 
 import static player.BakaPlayerStart.*;
@@ -123,7 +126,6 @@ public class BakaController {
         AnchorPane scene = new AnchorPane();
         Label name = new Label();
         String source = item.getSource();
-        String button="-fx-font-family: PT Sans; -fx-text-fill: #131313; -fx-font-size:9pt; -fx-padding: 1 1 1 1; -fx-border-color: #131313; -fx-border-width: 1; -fx-background-insets: 0 0 0 0, 0, 1, 2;";
         if (source.equals("yandex")) {
             scene.setStyle("-fx-background-color: #ffcc00;");
         }
@@ -143,18 +145,30 @@ public class BakaController {
             name.setText(t1);
             System.out.println("нужное изменение" + t1);
         });
-        Button edit = new Button("изменить");
-        Button delete = new Button("удалить");
-        Button play = new Button("старт");
-        edit.setPrefHeight(20);
-        edit.setPrefWidth(65);
-        edit.setStyle("-fx-font-size:10");
-        delete.setPrefWidth(50);
-        delete.setPrefHeight(20);
-        delete.setStyle("-fx-font-size:10");
-        play.setPrefWidth(40);
-        play.setPrefHeight(20);
-        play.setStyle("-fx-font-size:10");
+        File editFile = new File("src/main/resources/edit.png");
+        Image editImage = new Image(editFile.toURI().toString());
+        ImageView editView = new ImageView(editImage);
+        File deleteFile = new File("src/main/resources/trash (1).png");
+        Image deleteImage = new Image(deleteFile.toURI().toString());
+        ImageView deleteView = new ImageView(deleteImage);
+        File playFile = new File("src/main/resources/play-button.png");
+        Image playImage = new Image(playFile.toURI().toString());
+        ImageView playView = new ImageView(playImage);
+        Button edit = new Button();
+        edit.setStyle("-fx-background-color: transparent;");
+        edit.setGraphic(editView);
+        Button delete = new Button();
+        delete.setStyle("-fx-background-color: transparent;");
+        delete.setGraphic(deleteView);
+        Button play = new Button();
+        play.setStyle("-fx-background-color: transparent;");
+        play.setGraphic(playView);
+        edit.setMaxHeight(20);
+        edit.setMaxWidth(20);
+        delete.setMaxWidth(20);
+        delete.setMaxHeight(20);
+        play.setMaxWidth(20);
+        play.setMaxHeight(20);
         play.setOnAction(actionEvent -> BakaPlayerStart.Link(item));
         delete.setOnAction(actionEvent -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -175,12 +189,9 @@ public class BakaController {
         edit.setOnAction(actionEvent -> {
             BakaPlayerStart.EditPlaylist(item);
         });
-        edit.setStyle(button);
-        delete.setStyle(button);
-        play.setStyle(button);
-        AnchorPane.setRightAnchor(delete, 72d);
-        AnchorPane.setRightAnchor(edit, 1d);
-        AnchorPane.setRightAnchor(play, 126d);
+        AnchorPane.setRightAnchor(delete, 10d);
+        AnchorPane.setRightAnchor(edit, 32d);
+        AnchorPane.setRightAnchor(play, 56d);
         AnchorPane.setTopAnchor(delete, 1d);
         AnchorPane.setTopAnchor(play, 1d);
         AnchorPane.setTopAnchor(edit, 1d);

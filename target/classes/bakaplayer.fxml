@@ -14,58 +14,58 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="vbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#click" prefHeight="600.0" prefWidth="400.0" styleClass="background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="player.BakaController">
-   <children>
-      <MenuBar prefHeight="23.0" prefWidth="400.0" stylesheets="@styles.css">
-        <menus>
-          <Menu mnemonicParsing="false" onAction="#help" text="Меню">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#addPlaylist" text="Добавить плейлист" />
-                  <MenuItem mnemonicParsing="false" onAction="#clear" text="Очистить плейлисты" />
-                  <MenuItem mnemonicParsing="false" onAction="#help" text="Помощь" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <HBox minHeight="27.0" minWidth="400.0" prefHeight="27.0" prefWidth="400.0" style="-fx-background-color: #131313;">
-         <children>
-            <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@pupa.png" />
-               </image>
-            </ImageView>
-             <TextField fx:id="search" minHeight="30.0" minWidth="373.0" onKeyTyped="#searchstart" prefHeight="30.0" prefWidth="373.0" style="-fx-background-color: #131313; -fx-font-family: PT Sans; -fx-font-size: 14; -fx-text-fill: white;" HBox.hgrow="ALWAYS" />
-         </children>
-      </HBox>
-      <TabPane prefHeight="508.0" prefWidth="400.0" style="-fx-background-color: #0a0a0a;" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-        <tabs>
-          <Tab styleClass="yt_tab" text="Youtube">
-               <content>
-                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="Infinity" pannable="true" prefHeight="200.0" prefWidth="200.0">
-                     <content>
-                        <ListView fx:id="youtube_list" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="400.0" style="-fx-background-color: #131313;" stylesheets="@styles.css" />
-                     </content>
-                  </ScrollPane>
-               </content>
-            </Tab>
-          <Tab styleClass="ya_tab" text="Yandex">
-              <content>
-                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="Infinity" pannable="true" prefHeight="200.0" prefWidth="200.0">
-                      <content>
-                          <ListView fx:id="yandex_list" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #131313;" />
-                      </content>
-                  </ScrollPane>
-              </content>
-            </Tab>
-            <Tab styleClass="spt_tab" text="Spotify">
-                <content>
-                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="Infinity" pannable="true" prefHeight="200.0" prefWidth="200.0">
-                        <content>
-                            <ListView fx:id="spotify_list" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #131313;" />
-                        </content>
-                    </ScrollPane>
-                </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-   </children>
+    <children>
+        <MenuBar prefHeight="23.0" prefWidth="400.0" stylesheets="@styles.css">
+            <menus>
+                <Menu mnemonicParsing="false" onAction="#help" text="Меню">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#addPlaylist" text="Добавить плейлист" />
+                        <MenuItem mnemonicParsing="false" onAction="#clear" text="Очистить плейлисты" />
+                        <MenuItem mnemonicParsing="false" onAction="#help" text="Помощь" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <HBox minHeight="27.0" minWidth="400.0" prefHeight="27.0" prefWidth="400.0" style="-fx-background-color: #131313;">
+            <children>
+                <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@pupa.png" />
+                    </image>
+                </ImageView>
+                <TextField fx:id="search" minHeight="30.0" minWidth="373.0" onKeyTyped="#searchstart" prefHeight="30.0" prefWidth="373.0" style="-fx-background-color: #131313; -fx-font-family: PT Sans; -fx-font-size: 14; -fx-text-fill: white;" HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+        <TabPane prefHeight="508.0" prefWidth="400.0" style="-fx-background-color: #0a0a0a;" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab styleClass="yt_tab" text="Youtube">
+                    <content>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="Infinity" pannable="true" prefHeight="200.0" prefWidth="200.0">
+                            <content>
+                                <ListView fx:id="youtube_list" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="569.0" prefWidth="400.0" style="-fx-background-color: #131313;" stylesheets="@styles.css" />
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab styleClass="ya_tab" text="Yandex">
+                    <content>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="Infinity" pannable="true" prefHeight="200.0" prefWidth="200.0">
+                            <content>
+                                <ListView fx:id="yandex_list" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #131313;" />
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+                <Tab styleClass="spt_tab" text="Spotify">
+                    <content>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="Infinity" pannable="true" prefHeight="200.0" prefWidth="200.0">
+                            <content>
+                                <ListView fx:id="spotify_list" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #131313;" />
+                            </content>
+                        </ScrollPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
 </VBox>
