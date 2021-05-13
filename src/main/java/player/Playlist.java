@@ -5,12 +5,14 @@ import javafx.beans.property.StringProperty;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@XmlType(name = "playlist")
 public final class Playlist {
     private final StringProperty id;
     private final StringProperty source;
@@ -29,32 +31,32 @@ public final class Playlist {
     }
 
 
-    public StringProperty getId() {
+    public StringProperty getIdProperty() {
         return id;
     }
 
-    public StringProperty getName() {
+    public StringProperty getNameProperty() {
         return name;
     }
 
-    public StringProperty getSource() {
+    public StringProperty getSourcePropety() {
         return source;
     }
-
-    public String getNameString() {
+    @XmlElement(name = "name")
+    public String getName() {
         return name.get();
     }
-
-    public String getIdString() {
+    @XmlElement(name = "id")
+    public String getId() {
         return id.get();
     }
-
-    public String getSourceString() {
+    @XmlElement(name = "source")
+    public String getSource() {
         return source.get();
     }
 
     public int getWidth() {
-        switch (this.getSourceString()) {
+        switch (this.getSource()) {
             case "spotify":
                 return 300;
             case "youtube":
@@ -66,7 +68,7 @@ public final class Playlist {
     }
 
     public int getHeight() {
-        switch (this.getSourceString()) {
+        switch (this.getSource()) {
             case "spotify":
                 return 380;
             case "youtube":
@@ -78,7 +80,7 @@ public final class Playlist {
     }
 
     public void delete() {
-        this.name=new SimpleStringProperty("призрак");
+        this.name = new SimpleStringProperty("призрак");
     }
 
     public void setName(String newName) {
@@ -114,24 +116,31 @@ public final class Playlist {
                     s.find();
                     this.id.set(s.group(1));
                 }
+            } else if (link.contains("yandex") && (link.contains("album") || link.contains("playlists"))) {
+                this.source.set("yandex");
+                Pattern spt = Pattern.compile("users/.+|album/.+");
+                Matcher s = spt.matcher(link);
+                s.find();
+                this.id.set(s.group(0));
+            } else {
+                throw new NullPointerException("Некорректный ввод");
             }
-         else if (link.contains("yandex") && (link.contains("album") || link.contains("playlists"))) {
-            this.source.set("yandex");
-            Pattern spt = Pattern.compile("users/.+|album/.+");
-            Matcher s = spt.matcher(link);
-            s.find();
-            this.id.set(s.group(0));
-        } else {
-            throw new NullPointerException("Некорректный ввод");
-        }
         } catch (IllegalStateException e) {
             throw new NullPointerException();
         }
+        String newlink = link;
+        if (this.getSource().equals("youtube") && link.contains("watch")) {
+            newlink = "https://www.youtube.com/playlist?list=" + this.getId();
+        }
+        if (this.getSource().equals("spotify") && link.contains("?")) {
+            newlink = "https://open.spotify.com/" + this.getId();
+        }
         Document doc;
         String title = "";
+        System.out.println(title);
         try {
             try {
-                doc = Jsoup.connect(link).get();
+                doc = Jsoup.connect(newlink).get();
                 title = doc.title();
             } catch (MalformedURLException e) {
                 throw new NullPointerException("Некорректный ввод");
@@ -139,14 +148,14 @@ public final class Playlist {
         } catch (IOException e) {
             throw new NullPointerException("Некорректный ввод");
         }
-        if (this.getSourceString().equals("youtube") && !title.isEmpty())
+        if (this.getSource().equals("youtube") && !title.isEmpty())
             this.name.set(title.substring(0, title.length() - 10));
-        else if (this.getSourceString().equals("spotify") && !title.contains("Web Player")) {
+        else if (this.getSource().equals("spotify") && !title.contains("Web Player")) {
             if (title.contains("Album"))
                 this.name.set(title.substring(0, title.length() - 10));
             if (title.contains("Spotify Playlist"))
                 this.name.set(title.substring(0, title.length() - 19));
-        } else if (this.getSourceString().equals("yandex")) {
+        } else if (this.getSource().equals("yandex")) {
             if (title.contains("плейлист на Яндекс.Музыке"))
                 this.name.set(title.substring(0, title.length() - 28));
             if (title.contains("Слушать онлайн на Яндекс.Музыке"))
@@ -157,18 +166,18 @@ public final class Playlist {
     }
 
     public String getHTML() {
-        if (this.getSourceString().equals("youtube")) {
-            return ("<html><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/videoseries?list=" + this.getIdString() + "\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe></html>");
+        if (this.getSource().equals("youtube")) {
+            return ("<html><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/videoseries?list=" + this.getId() + "\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe></html>");
 
         }
-        if (this.getSourceString().equals("spotify")) {
-            return ("<html><iframe src=\"https://open.spotify.com/embed/" + this.getIdString() + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowtransparency=\"true\" allow=\"encrypted-media\"></iframe></html>");
+        if (this.getSource().equals("spotify")) {
+            return ("<html><iframe src=\"https://open.spotify.com/embed/" + this.getId() + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowtransparency=\"true\" allow=\"encrypted-media\"></iframe></html>");
 
         } else {
-            if (this.getIdString().contains("playlists"))
-                return ("<html><iframe frameborder=\"0\"style=\"border:none;width:100%;height:100%;\"width=\"100%\"height=\"100%\"src=\"https://music.yandex.ru/iframe/#playlist" + this.getIdString().replaceAll("/playlists/", "/").substring(5) + "\"></iframe></html>");
+            if (this.getId().contains("playlists"))
+                return ("<html><iframe frameborder=\"0\"style=\"border:none;width:100%;height:100%;\"width=\"100%\"height=\"100%\"src=\"https://music.yandex.ru/iframe/#playlist" + this.getId().replaceAll("/playlists/", "/").substring(5) + "\"></iframe></html>");
             else
-                return ("<html><iframe frameborder=\"0\" style=\"border:none;width:100%;height:100%;\" width=\"100%\" height=\"100%\" src=\"https://music.yandex.ru/iframe/#album" + this.getIdString().replaceAll("album/", "/") + "\"></iframe></html>");
+                return ("<html><iframe frameborder=\"0\" style=\"border:none;width:100%;height:100%;\" width=\"100%\" height=\"100%\" src=\"https://music.yandex.ru/iframe/#album" + this.getId().replaceAll("album/", "/") + "\"></iframe></html>");
         }
     }
 }

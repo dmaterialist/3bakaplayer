@@ -29,6 +29,7 @@ public class AddPlaylistController {
 
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
+        System.out.println("3,empty" + playlist.getName());
     }
 
     public boolean isOkClicked() {
@@ -41,13 +42,16 @@ public class AddPlaylistController {
 
     @FXML
     private void ok() {
+        System.out.println("4,empty" + playlist.getName());
         try {
             playlist.setByLink(new_link.getText());
-            source=playlist.getSourceString();
+            source = playlist.getSource();
+            System.out.println("5,name" + playlist.getName());
             if (!new_name.getText().isEmpty()) {
                 playlist.setName(new_name.getText());
             }
-            okClicked=true;
+            okClicked = true;
+            stage.close();
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.initOwner(stage);
@@ -55,21 +59,18 @@ public class AddPlaylistController {
             alert.setContentText("Пожалуйста, введите правильную ссылку");
             alert.showAndWait();
         }
-        stage.close();
     }
 
     @FXML
     private void ok_boomer() {
         playlist.setName(edit_name.getText());
-        playlist.delete();
         stage.close();
     }
 
 
     @FXML
-    private void close() {
+    private void cancel() {
         stage.close();
-        System.out.println("закрыть");
     }
 
 }
