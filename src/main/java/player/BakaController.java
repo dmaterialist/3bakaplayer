@@ -3,6 +3,7 @@ package player;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,8 +16,14 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Optional;
 
 import static player.BakaPlayerStart.*;
@@ -68,8 +75,18 @@ public class BakaController {
 
 
     @FXML
-    private void help() {
-
+    private void help() throws MalformedURLException {
+        final Stage stage = new Stage();
+        stage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
+        WebView root = new WebView();
+        final WebEngine webEngine = root.getEngine();
+        File file = new File("src/main/resources/tutorial.html");
+        URL url = file.toURI().toURL();
+        webEngine.load(url.toString());
+        Scene scene = new Scene(root);
+        stage.setTitle("Помощь");
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
