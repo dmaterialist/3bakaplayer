@@ -3,7 +3,11 @@ package player;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class AddPlaylistController {
     @FXML
@@ -54,9 +58,13 @@ public class AddPlaylistController {
             stage.close();
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            File editFile = new File("src/main/resources/cantfind.png");
+            Image editImage = new Image(editFile.toURI().toString());
+            ImageView editView = new ImageView(editImage);
+            alert.setGraphic(editView);
             alert.initOwner(stage);
             alert.setTitle("Ошибочный ввод");
-            alert.setContentText("Пожалуйста, введите правильную ссылку");
+            alert.setHeaderText("Пожалуйста, введите правильную ссылку");
             alert.showAndWait();
         }
     }

@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playlists>
+    <spotify_playlist>
+        <id>album/7wHEtuvZ9gQrLAgNGcFFp3</id>
+        <name>ADULTRAZ - Album by -MASA Works DESIGEN-</name>
+        <source>spotify</source>
+    </spotify_playlist>
+    <yandex_playlist>
+        <id>users/yamusic-dejavu/playlists/108905445</id>
+        <name>Дежавю</name>
+        <source>yandex</source>
+    </yandex_playlist>
+    <youtube_playlist>
+        <id>PLxB9p8WAdj0L5LT_UYU_fTmtGmqj8NdVW</id>
+        <name>ひぐらしのなく頃に奉 挿入ムービー</name>
+        <source>youtube</source>
+    </youtube_playlist>
     <youtube_playlist>
         <id>PLkU8l1ITH2CVNQykehf3sm3EIXP0UHZ5T</id>
         <name>feat. Rena</name>

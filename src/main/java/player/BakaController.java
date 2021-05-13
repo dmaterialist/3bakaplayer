@@ -44,8 +44,12 @@ public class BakaController {
     @FXML
     private void clear() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        File delFile = new File("src/main/resources/deleting.png");
+        Image delImage = new Image(delFile.toURI().toString());
+        ImageView delView = new ImageView(delImage);
+        alert.setGraphic(delView);
         alert.setTitle("Продолжить?");
-        alert.setContentText("Вы собираетесь удалить все плейлисты?");
+        alert.setHeaderText ("Вы собираетесь удалить все плейлисты?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             BakaPlayerStart.clearAll();
@@ -58,7 +62,7 @@ public class BakaController {
     private void click() {
         vbox.heightProperty().addListener((observableValue, number, t1) -> {
             youtube_list.setPrefHeight(t1.doubleValue());
-            System.out.println("высота"+t1);
+            System.out.println("высота" + t1);
         });
     }
 
@@ -114,10 +118,10 @@ public class BakaController {
         yandex_list.setItems(getYandex());
         spotify_list.setItems(getSpotify());
         getWindowHeight().addListener((observableValue, number, t1) -> {
-            youtube_list.setPrefHeight(t1.doubleValue()-80);
-            yandex_list.setPrefHeight(t1.doubleValue()-80);
-            spotify_list.setPrefHeight(t1.doubleValue()-80);
-            System.out.println("высота"+t1.doubleValue());
+            youtube_list.setPrefHeight(t1.doubleValue() - 80);
+            yandex_list.setPrefHeight(t1.doubleValue() - 80);
+            spotify_list.setPrefHeight(t1.doubleValue() - 80);
+            System.out.println("высота" + t1.doubleValue());
         });
         getWindowWidth().addListener((observableValue, number, t1) -> initialize());
     }
@@ -128,16 +132,14 @@ public class BakaController {
         String source = item.getSource();
         if (source.equals("yandex")) {
             scene.setStyle("-fx-background-color: #ffcc00;");
-        }
-        else if (source.equals("youtube")) {
+        } else if (source.equals("youtube")) {
             scene.setStyle("-fx-background-color: #c4302b;");
-        }
-        else {
+        } else {
             scene.setStyle("-fx-background-color: #1db954;");
         }
         name.setStyle("-fx-font-family: PT Sans; -fx-text-fill: #131313; -fx-font-size:11pt;");
-        name.setPrefWidth(getWindowWidth().doubleValue()-180);
-        System.out.println("ширина"+name.getPrefWidth());
+        name.setPrefWidth(getWindowWidth().doubleValue() - 110);
+        System.out.println("ширина" + name.getPrefWidth());
         StringProperty string = new SimpleStringProperty(item.getName());
         name.setText(string.get());
         string.bind(item.getNameProperty());
@@ -148,6 +150,9 @@ public class BakaController {
         File editFile = new File("src/main/resources/edit.png");
         Image editImage = new Image(editFile.toURI().toString());
         ImageView editView = new ImageView(editImage);
+        File delFile = new File("src/main/resources/deleting.png");
+        Image delImage = new Image(delFile.toURI().toString());
+        ImageView delView = new ImageView(delImage);
         File deleteFile = new File("src/main/resources/trash (1).png");
         Image deleteImage = new Image(deleteFile.toURI().toString());
         ImageView deleteView = new ImageView(deleteImage);
@@ -173,7 +178,8 @@ public class BakaController {
         delete.setOnAction(actionEvent -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Продолжить?");
-            alert.setContentText("Вы собираетесь удалить плейлист " + item.getName());
+            alert.setHeaderText ("Вы собираетесь удалить плейлист " + item.getName());
+            alert.setGraphic(delView);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 if (source.equals("youtube"))

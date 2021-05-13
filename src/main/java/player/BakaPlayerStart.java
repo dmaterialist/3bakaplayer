@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -211,7 +213,7 @@ public class BakaPlayerStart extends Application {
             loader.setLocation(AddPlaylistController.class.getResource("/editPlaylist.fxml"));
             Parent root = loader.load();
             stage.setTitle("Изменить плейлист");
-            Scene scene = new Scene(root, 400, 120);
+            Scene scene = new Scene(root, 400, 80);
             stage.setScene(scene);
             AddPlaylistController controller = loader.getController();
             controller.setStage(stage);
@@ -224,9 +226,13 @@ public class BakaPlayerStart extends Application {
     }
 
     private static void clonesAreRestricted() {
+        File editFile = new File("src/main/resources/cantfind.png");
+        javafx.scene.image.Image editImage = new Image(editFile.toURI().toString());
+        ImageView editView = new ImageView(editImage);
         Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setGraphic(editView);
         alert.setHeaderText("Запрещено добавление одинаковых плейлистов");
-        alert.setTitle("Добавление не выполнено");
+        alert.setTitle("Не следует множить сущее без необходимости...");
         alert.setContentText("Но Вы можете отредактировать название плейлиста!");
         alert.showAndWait();
     }

@@ -140,12 +140,16 @@ public final class Playlist {
         System.out.println(title);
         try {
             try {
-                doc = Jsoup.connect(newlink).get();
-                title = doc.title();
-            } catch (MalformedURLException e) {
+                try {
+                    doc = Jsoup.connect(newlink).get();
+                    title = doc.title();
+                } catch (MalformedURLException e) {
+                    throw new NullPointerException("Некорректный ввод");
+                }
+            } catch (IOException e) {
                 throw new NullPointerException("Некорректный ввод");
             }
-        } catch (IOException e) {
+        }catch (IllegalArgumentException e) {
             throw new NullPointerException("Некорректный ввод");
         }
         if (this.getSource().equals("youtube") && !title.isEmpty())
