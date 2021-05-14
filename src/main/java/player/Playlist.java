@@ -137,7 +137,6 @@ public final class Playlist {
         }
         Document doc;
         String title = "";
-        System.out.println(title);
         try {
             try {
                 try {
@@ -155,7 +154,7 @@ public final class Playlist {
         if (this.getSource().equals("youtube") && !title.isEmpty())
             this.name.set(title.substring(0, title.length() - 10));
         else if (this.getSource().equals("spotify") && !title.contains("Web Player")) {
-            if (title.contains("Album"))
+            if (title.contains("Album") || title.contains("Single"))
                 this.name.set(title.substring(0, title.length() - 10));
             if (title.contains("Spotify Playlist"))
                 this.name.set(title.substring(0, title.length() - 19));

@@ -8,14 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -26,11 +21,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class BakaPlayerStart extends Application {
-    private static ObservableList<Playlist> youtube = FXCollections.observableArrayList();
-    private static ObservableList<Playlist> spotify = FXCollections.observableArrayList();
-    private static ObservableList<Playlist> yandex = FXCollections.observableArrayList();
-    private static DoubleProperty windowWidth = new SimpleDoubleProperty(400);
-    private static DoubleProperty windowHeight = new SimpleDoubleProperty(600);
+    private static final ObservableList<Playlist> youtube = FXCollections.observableArrayList();
+    private static final ObservableList<Playlist> spotify = FXCollections.observableArrayList();
+    private static final ObservableList<Playlist> yandex = FXCollections.observableArrayList();
+    private static final DoubleProperty windowWidth = new SimpleDoubleProperty(400);
+    private static final DoubleProperty windowHeight = new SimpleDoubleProperty(600);
 
 
     public BakaPlayerStart() {
@@ -79,34 +74,6 @@ public class BakaPlayerStart extends Application {
         yandex.clear();
     }
 
-
-    public static boolean findYoutube(Playlist player) {
-        for (int i = 0; i < getYoutube().size(); i++) {
-            if (getYoutube().get(i).getId().equals(player.getId())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean findSpotify(Playlist player) {
-        for (int i = 0; i < getSpotify().size(); i++) {
-            if (getSpotify().get(i).getId().equals(player.getId())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean findYandex(Playlist player) {
-        for (int i = 0; i < getYandex().size(); i++) {
-            if (getYandex().get(i).getId().equals(player.getId())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static DoubleProperty getWindowWidth() {
         return windowWidth;
     }
@@ -121,19 +88,17 @@ public class BakaPlayerStart extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(BakaPlayerStart.class.getResource("/bakaplayer.fxml"));
         Parent root = loader.load();
-        primaryStage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
         Scene scene = new Scene(root, 400, 600);
         scene.heightProperty().addListener((observableValue, number, t1) -> windowHeight.setValue(t1));
-        scene.widthProperty().addListener((observableValue, number, t1) -> {
-            windowWidth.setValue(t1);
-        });
+        scene.widthProperty().addListener((observableValue, number, t1) -> windowWidth.setValue(t1));
         primaryStage.setMinWidth(400);
         primaryStage.setMinHeight(200);
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
         primaryStage.setTitle("3baka! music player");
         primaryStage.show();
         BakaController controller = loader.getController();
-        controller.setMainApp(this);
+        controller.setting(primaryStage);
         primaryStage.setOnCloseRequest(we -> {
             try {
                 save();
@@ -161,47 +126,24 @@ public class BakaPlayerStart extends Application {
         stage.setScene(scene);
 
         stage.show();
-        stage.setOnCloseRequest(windowEvent -> webEngine.load(null)); //похоже на костыль, но больше я способов не видел
+        stage.setOnCloseRequest(windowEvent -> webEngine.load(null));
     }
 
-    public static void NewPlaylist(Playlist playlist) {
-        try {
-            final Stage stage = new Stage();
-            stage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(BakaPlayerStart.class.getResource("/addPlaylist.fxml"));
-            Parent root = loader.load();
-            stage.setResizable(false);
-            stage.setTitle("Добавить плейлист");
-            Scene scene = new Scene(root, 400, 120);
-            stage.setScene(scene);
-            AddPlaylistController controller = loader.getController();
-            controller.setStage(stage);
-            controller.setPlaylist(playlist);
-            stage.showAndWait();
-            if (controller.isOkClicked()) {
-                String source = controller.getSource();
-                if (source.equals("youtube")) {
-                    if (!findYoutube(playlist)) {
-                        addYoutube(playlist);
-                    } else clonesAreRestricted();
-                }
-                if (source.equals("spotify")) {
-                    if (!findSpotify(playlist)) {
-                        addSpotify(playlist);
-                    } else clonesAreRestricted();
-                }
-                if (source.equals("yandex")) {
-                    if (!findYandex(playlist))
-                        addYandex(playlist);
-                    else clonesAreRestricted();
-                }
-            }
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
-
+    public static void NewPlaylist() throws IOException {
+        Playlist playlist = new Playlist();
+        final Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(BakaPlayerStart.class.getResource("/addPlaylist.fxml"));
+        Parent root = loader.load();
+        stage.getIcons().add(new javafx.scene.image.Image("/3baka.jpg"));
+        stage.setResizable(false);
+        stage.setTitle("Добавить плейлист");
+        Scene scene = new Scene(root, 400, 120);
+        stage.setScene(scene);
+        AddPlaylistController controller = loader.getController();
+        controller.setStage(stage);
+        controller.setPlaylist(playlist);
+        stage.show();
     }
 
     public static void EditPlaylist(Playlist playlist) {
@@ -216,25 +158,13 @@ public class BakaPlayerStart extends Application {
             Scene scene = new Scene(root, 400, 80);
             stage.setScene(scene);
             AddPlaylistController controller = loader.getController();
-            controller.setStage(stage);
             controller.setPlaylist(playlist);
-            stage.showAndWait();
+            controller.setStage(stage);
+            stage.show();
         } catch (
                 IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void clonesAreRestricted() {
-        File editFile = new File("src/main/resources/cantfind.png");
-        javafx.scene.image.Image editImage = new Image(editFile.toURI().toString());
-        ImageView editView = new ImageView(editImage);
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setGraphic(editView);
-        alert.setHeaderText("Запрещено добавление одинаковых плейлистов");
-        alert.setTitle("Не следует множить сущее без необходимости...");
-        alert.setContentText("Но Вы можете отредактировать название плейлиста!");
-        alert.showAndWait();
     }
 
     public void load() throws JAXBException {
@@ -242,35 +172,22 @@ public class BakaPlayerStart extends Application {
         Unmarshaller um = context.createUnmarshaller();
         File file = new File("src/main/resources/save.xml");
         PlaylistList list = (PlaylistList) um.unmarshal(file);
-        try {
+        if (!youtube.isEmpty())
             youtube.addAll(list.getYoutube());
-        } catch (NullPointerException ignored) {
-        }
-        try {
-        spotify.addAll(list.getSpotify());
-        } catch (NullPointerException ignored) {
-        }
-        try {
-        yandex.addAll(list.getYandex());
-        } catch (NullPointerException ignored) {
-        }
+        if (!spotify.isEmpty())
+            spotify.addAll(list.getSpotify());
+        if (!yandex.isEmpty())
+            yandex.addAll(list.getYandex());
     }
 
     public void save() throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(PlaylistList.class);
         Marshaller m = context.createMarshaller();
-        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         PlaylistList list = new PlaylistList();
         list.setSpotify(spotify);
         list.setYandex(yandex);
         list.setYoutube(youtube);
-        for (int i=0; i<list.getSpotify().size();i++)
-        System.out.println(list.getSpotify().get(i).getName());
-        try {
-            m.marshal(list, new File("src/main/resources/save.xml"));
-        } catch (JAXBException e) {
-            System.out.println("error");
-        }
+        m.marshal(list, new File("src/main/resources/save.xml"));
     }
 
 

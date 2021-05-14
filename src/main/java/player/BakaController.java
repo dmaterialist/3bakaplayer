@@ -1,7 +1,5 @@
 package player;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,16 +10,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXML;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
@@ -37,21 +32,21 @@ public class BakaController {
     private ListView<Playlist> yandex_list;
     @FXML
     private VBox vbox;
-    private BakaPlayerStart main;
     @FXML
     private TextField search;
+    private Stage stage;
 
 
     @FXML
-    private void addPlaylist() {
-        Playlist playlist = new Playlist();
-        BakaPlayerStart.NewPlaylist(playlist);
+    private void addPlaylist() throws IOException {
+        BakaPlayerStart.NewPlaylist();
     }
 
     @FXML
     private void clear() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         File delFile = new File("src/main/resources/deleting.png");
+        alert.initOwner(stage);
         Image delImage = new Image(delFile.toURI().toString());
         ImageView delView = new ImageView(delImage);
         alert.setGraphic(delView);
@@ -67,10 +62,7 @@ public class BakaController {
 
     @FXML
     private void click() {
-        vbox.heightProperty().addListener((observableValue, number, t1) -> {
-            youtube_list.setPrefHeight(t1.doubleValue());
-            System.out.println("высота" + t1);
-        });
+        vbox.heightProperty().addListener((observableValue, number, t1) -> youtube_list.setPrefHeight(t1.doubleValue()));
     }
 
 
@@ -129,21 +121,20 @@ public class BakaController {
         });
     }
 
-    public void setMainApp(BakaPlayerStart mainApp) {
-        this.main = mainApp;
+    public void setting(Stage stage) {
         youtube_list.setItems(getYoutube());
         yandex_list.setItems(getYandex());
         spotify_list.setItems(getSpotify());
+        this.stage=stage;
         getWindowHeight().addListener((observableValue, number, t1) -> {
             youtube_list.setPrefHeight(t1.doubleValue() - 80);
             yandex_list.setPrefHeight(t1.doubleValue() - 80);
             spotify_list.setPrefHeight(t1.doubleValue() - 80);
-            System.out.println("высота" + t1.doubleValue());
         });
-        getWindowWidth().addListener((observableValue, number, t1) -> initialize());
     }
 
     public AnchorPane setButtons(Playlist item) {
+        System.out.println("start");
         AnchorPane scene = new AnchorPane();
         Label name = new Label();
         String source = item.getSource();
@@ -155,15 +146,10 @@ public class BakaController {
             scene.setStyle("-fx-background-color: #1db954;");
         }
         name.setStyle("-fx-font-family: PT Sans; -fx-text-fill: #131313; -fx-font-size:11pt;");
-        name.setPrefWidth(getWindowWidth().doubleValue() - 110);
-        System.out.println("ширина" + name.getPrefWidth());
-        StringProperty string = new SimpleStringProperty(item.getName());
-        name.setText(string.get());
-        string.bind(item.getNameProperty());
-        string.addListener((observableValue, number, t1) -> {
-            name.setText(t1);
-            System.out.println("нужное изменение" + t1);
-        });
+        name.setPrefWidth(getWindowWidth().doubleValue()-110);
+        name.setText(item.getName());
+        getWindowWidth().addListener((observableValue, number, t1) -> name.setPrefWidth(t1.doubleValue() - 110));
+        item.getNameProperty().addListener((observableValue, number, t1) -> name.setText(item.getName()));
         File editFile = new File("src/main/resources/edit.png");
         Image editImage = new Image(editFile.toURI().toString());
         ImageView editView = new ImageView(editImage);
@@ -237,15 +223,6 @@ public class BakaController {
             youtube_list.setItems(youtube);
             yandex_list.setItems(yandex);
             spotify_list.setItems(spotify);
-            for (int i = 0; i < getYoutube().size(); i++) {
-                System.out.println(getYoutube().get(i).getName());
-            }
-            for (int i = 0; i < getYandex().size(); i++) {
-                System.out.println(getYandex().get(i).getName());
-            }
-            for (int i = 0; i < getSpotify().size(); i++) {
-                System.out.println(getSpotify().get(i).getName());
-            }
         }
     }
 

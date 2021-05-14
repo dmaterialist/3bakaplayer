@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class PlaylistTest {
     @Test
-    public void easyTest() throws IOException {
+    public void easyTest() {
         Playlist test = new Playlist("PLxB9p8WAdj0L5LT_UYU_fTmtGmqj8NdVW", "youtube", "higurashi");
         test.setName("MASA hardcore");
         test.setSource("spotify");
@@ -53,6 +53,18 @@ public class PlaylistTest {
         assertEquals("spotify", test.getSource());
         assertEquals("ADULTRAZ - Album by -MASA Works DESIGEN-", test.getName());
         assertEquals("<html><iframe src=\"https://open.spotify.com/embed/album/7wHEtuvZ9gQrLAgNGcFFp3\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowtransparency=\"true\" allow=\"encrypted-media\"></iframe></html>", test.getHTML());
+        assertEquals(380, test.getHeight());
+        assertEquals(300, test.getWidth());
+    }
+
+    @Test
+    public void SpotifySingleTest() {
+        Playlist test = new Playlist();
+        test.setByLink("https://open.spotify.com/album/0c7bLm2cqhAWQ4BhovOUdm?_ga=2.189488744.237721332.1620998840-427048651.1620480118");
+        assertEquals("album/0c7bLm2cqhAWQ4BhovOUdm", test.getId());
+        assertEquals("spotify", test.getSource());
+        assertEquals("<html><iframe src=\"https://open.spotify.com/embed/album/0c7bLm2cqhAWQ4BhovOUdm\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowtransparency=\"true\" allow=\"encrypted-media\"></iframe></html>", test.getHTML());
+        assertEquals("Too Bizarre (with Swae Lee & Siiickbrain) - Single by Skrillex, Swae Lee, Siiickbrain", test.getName());
         assertEquals(380, test.getHeight());
         assertEquals(300, test.getWidth());
     }
@@ -127,5 +139,17 @@ public class PlaylistTest {
     public void FalseLinkTest6() {
         Playlist test = new Playlist();
         test.setByLink("https://10th.madokamagicausa.com/");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void BrokenLinkTest() {
+        Playlist test = new Playlist();
+        test.setByLink("https://10th.madokamagicausa.co/");
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void NotLinkTest6() {
+        Playlist test = new Playlist();
+        test.setByLink("magic");
     }
 }

@@ -17,7 +17,7 @@
     <children>
         <MenuBar prefHeight="23.0" prefWidth="400.0" stylesheets="@styles.css">
             <menus>
-                <Menu mnemonicParsing="false" onAction="#help" text="Меню">
+                <Menu mnemonicParsing="false" text="Меню">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#addPlaylist" text="Добавить плейлист" />
                         <MenuItem mnemonicParsing="false" onAction="#clear" text="Очистить плейлисты" />

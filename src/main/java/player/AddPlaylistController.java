@@ -21,10 +21,14 @@ public class AddPlaylistController {
     private Playlist playlist;
     private String source;
     private Stage stage;
-    private boolean okClicked = false;
+    private ImageView imageView;
+
 
     @FXML
     private void initialize() {
+        File file= new File("src/main/resources/cantfind.png");
+        Image image=new Image(file.toURI().toString());
+        this.imageView=new ImageView(image);
     }
 
     public void setStage(Stage stage) {
@@ -33,12 +37,8 @@ public class AddPlaylistController {
 
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
-        System.out.println("3,empty" + playlist.getName());
     }
 
-    public boolean isOkClicked() {
-        return okClicked;
-    }
 
     public String getSource() {
         return source;
@@ -46,22 +46,25 @@ public class AddPlaylistController {
 
     @FXML
     private void ok() {
-        System.out.println("4,empty" + playlist.getName());
         try {
             playlist.setByLink(new_link.getText());
             source = playlist.getSource();
-            System.out.println("5,name" + playlist.getName());
             if (!new_name.getText().isEmpty()) {
                 playlist.setName(new_name.getText());
             }
-            okClicked = true;
+                if (source.equals("youtube")) {
+                    BakaPlayerStart.addYoutube(playlist);
+                }
+                if (source.equals("spotify")) {
+                    BakaPlayerStart.addSpotify(playlist);
+                }
+                if (source.equals("yandex")) {
+                    BakaPlayerStart.addYandex(playlist);
+                }
             stage.close();
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            File editFile = new File("src/main/resources/cantfind.png");
-            Image editImage = new Image(editFile.toURI().toString());
-            ImageView editView = new ImageView(editImage);
-            alert.setGraphic(editView);
+            alert.setGraphic(imageView);
             alert.initOwner(stage);
             alert.setTitle("Ошибочный ввод");
             alert.setHeaderText("Пожалуйста, введите правильную ссылку");
