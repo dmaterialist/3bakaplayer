@@ -1,0 +1,8 @@
+.scroll-bar:vertical {
+ -fx-background-color: #0a0a0a;
+ -fx-background-insets: 0, 1 0 1 0;
+}
+
+.scroll-bar > .thumb {
+    -fx-background-color: #c4302b;
+}

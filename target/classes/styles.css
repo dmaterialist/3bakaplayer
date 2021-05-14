@@ -76,15 +76,6 @@
     -fx-opacity: 1;
 }
 
-.scroll-bar:vertical {
- -fx-background-color: #0a0a0a;
- -fx-background-insets: 0, 1 0 1 0;
-}
-
-.scroll-bar > .thumb {
-    -fx-background-color: #cc9d1d;
-}
-
 .label-header {
     -fx-font-size: 12pt;
     -fx-font-family: "PT Sans";
