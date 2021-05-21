@@ -26,9 +26,7 @@ public class AddPlaylistController {
 
     @FXML
     private void initialize() {
-        File file= new File("src/main/resources/cantfind.png");
-        Image image=new Image(file.toURI().toString());
-        this.imageView=new ImageView(image);
+        this.imageView = new ImageView("/cantfind.png");
     }
 
     public void setStage(Stage stage) {
@@ -52,17 +50,17 @@ public class AddPlaylistController {
             if (!new_name.getText().isEmpty()) {
                 playlist.setName(new_name.getText());
             }
-                if (source.equals("youtube")) {
-                    BakaPlayerStart.addYoutube(playlist);
-                }
-                if (source.equals("spotify")) {
-                    BakaPlayerStart.addSpotify(playlist);
-                }
-                if (source.equals("yandex")) {
-                    BakaPlayerStart.addYandex(playlist);
-                }
+            if (source.equals("youtube")) {
+                BakaPlayerStart.addYoutube(playlist);
+            }
+            if (source.equals("spotify")) {
+                BakaPlayerStart.addSpotify(playlist);
+            }
+            if (source.equals("yandex")) {
+                BakaPlayerStart.addYandex(playlist);
+            }
             stage.close();
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setGraphic(imageView);
             alert.initOwner(stage);

@@ -25,13 +25,15 @@ public class PlaylistList {
         return spotifyList;
     }
 
-    public void setYoutube(List<Playlist> youtubeList){
-        this.youtubeList=youtubeList;
+    public void setYoutube(List<Playlist> youtubeList) {
+        this.youtubeList = youtubeList;
     }
-    public void setYandex(List<Playlist> yandexList){
-        this.yandexList=yandexList;
+
+    public void setYandex(List<Playlist> yandexList) {
+        this.yandexList = yandexList;
     }
-    public void setSpotify(List<Playlist> spotifyList){
-        this.spotifyList=spotifyList;
+
+    public void setSpotify(List<Playlist> spotifyList) {
+        this.spotifyList = spotifyList;
     }
 }

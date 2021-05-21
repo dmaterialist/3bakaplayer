@@ -45,13 +45,11 @@ public class BakaController {
     @FXML
     private void clear() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        File delFile = new File("src/main/resources/deleting.png");
         alert.initOwner(stage);
-        Image delImage = new Image(delFile.toURI().toString());
-        ImageView delView = new ImageView(delImage);
+        ImageView delView = new ImageView("/deleting.png");
         alert.setGraphic(delView);
         alert.setTitle("Продолжить?");
-        alert.setHeaderText ("Вы собираетесь удалить все плейлисты?");
+        alert.setHeaderText("Вы собираетесь удалить все плейлисты?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             BakaPlayerStart.clearAll();
@@ -108,6 +106,7 @@ public class BakaController {
             }
         });
         spotify_list.setCellFactory(param -> new ListCell<>() {
+
             @Override
             protected void updateItem(Playlist item, boolean empty) {
                 super.updateItem(item, empty);
@@ -125,7 +124,7 @@ public class BakaController {
         youtube_list.setItems(getYoutube());
         yandex_list.setItems(getYandex());
         spotify_list.setItems(getSpotify());
-        this.stage=stage;
+        this.stage = stage;
         getWindowHeight().addListener((observableValue, number, t1) -> {
             youtube_list.setPrefHeight(t1.doubleValue() - 80);
             yandex_list.setPrefHeight(t1.doubleValue() - 80);
@@ -134,7 +133,6 @@ public class BakaController {
     }
 
     public AnchorPane setButtons(Playlist item) {
-        System.out.println("start");
         AnchorPane scene = new AnchorPane();
         Label name = new Label();
         String source = item.getSource();
@@ -146,22 +144,14 @@ public class BakaController {
             scene.setStyle("-fx-background-color: #1db954;");
         }
         name.setStyle("-fx-font-family: PT Sans; -fx-text-fill: #131313; -fx-font-size:11pt;");
-        name.setPrefWidth(getWindowWidth().doubleValue()-110);
+        name.setPrefWidth(getWindowWidth().doubleValue() - 110);
         name.setText(item.getName());
         getWindowWidth().addListener((observableValue, number, t1) -> name.setPrefWidth(t1.doubleValue() - 110));
         item.getNameProperty().addListener((observableValue, number, t1) -> name.setText(item.getName()));
-        File editFile = new File("src/main/resources/edit.png");
-        Image editImage = new Image(editFile.toURI().toString());
-        ImageView editView = new ImageView(editImage);
-        File delFile = new File("src/main/resources/deleting.png");
-        Image delImage = new Image(delFile.toURI().toString());
-        ImageView delView = new ImageView(delImage);
-        File deleteFile = new File("src/main/resources/trash (1).png");
-        Image deleteImage = new Image(deleteFile.toURI().toString());
-        ImageView deleteView = new ImageView(deleteImage);
-        File playFile = new File("src/main/resources/play-button.png");
-        Image playImage = new Image(playFile.toURI().toString());
-        ImageView playView = new ImageView(playImage);
+        ImageView editView = new ImageView("/edit.png");
+        ImageView delView = new ImageView("/deleting.png");
+        ImageView deleteView = new ImageView("/trash (1).png");
+        ImageView playView = new ImageView("/play-button.png");
         Button edit = new Button();
         edit.setStyle("-fx-background-color: transparent;");
         edit.setGraphic(editView);
@@ -181,7 +171,7 @@ public class BakaController {
         delete.setOnAction(actionEvent -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Продолжить?");
-            alert.setHeaderText ("Вы собираетесь удалить плейлист " + item.getName());
+            alert.setHeaderText("Вы собираетесь удалить плейлист " + item.getName());
             alert.setGraphic(delView);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {

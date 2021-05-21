@@ -118,10 +118,8 @@ public class BakaPlayerStart extends Application {
         root.setPrefWidth(playlist.getWidth());
         root.setPrefHeight(playlist.getHeight());
         final WebEngine webEngine = root.getEngine();
-        webEngine.loadContent(playlist.getHTML());
-
+        webEngine.loadContent("<html><iframe frameborder=\"0\" style=\"border:none;width:100%;height:100%; allow=\"encrypted-media\" src=\"" + playlist.getLink() + "\"></iframe></html>");
         Scene scene = new Scene(root);
-
         stage.setTitle("Плеер");
         stage.setScene(scene);
 
@@ -172,12 +170,19 @@ public class BakaPlayerStart extends Application {
         Unmarshaller um = context.createUnmarshaller();
         File file = new File("src/main/resources/save.xml");
         PlaylistList list = (PlaylistList) um.unmarshal(file);
-        if (!youtube.isEmpty())
+        try {
             youtube.addAll(list.getYoutube());
-        if (!spotify.isEmpty())
+        } catch (NullPointerException ignored) {
+        }
+        try {
             spotify.addAll(list.getSpotify());
-        if (!yandex.isEmpty())
-            yandex.addAll(list.getYandex());
+        } catch (NullPointerException ignored) {
+        }
+        try {
+            if (!list.getYandex().isEmpty())
+                yandex.addAll(list.getYandex());
+        } catch (NullPointerException ignored) {
+        }
     }
 
     public void save() throws JAXBException {

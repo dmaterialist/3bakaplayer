@@ -14,25 +14,25 @@ import java.util.regex.Pattern;
 
 @XmlType(name = "playlist")
 public final class Playlist {
-    private final StringProperty id;
+    private final StringProperty link;
     private final StringProperty source;
     private StringProperty name;
 
     public Playlist() {
-        this.id = new SimpleStringProperty("");
+        this.link = new SimpleStringProperty("");
         this.source = new SimpleStringProperty("");
         this.name = new SimpleStringProperty("");
     }
 
-    public Playlist(String id, String source, String name) {
-        this.id = new SimpleStringProperty(id);
+    public Playlist(String link, String source, String name) {
+        this.link = new SimpleStringProperty(link);
         this.name = new SimpleStringProperty(name);
         this.source = new SimpleStringProperty(source);
     }
 
 
     public StringProperty getIdProperty() {
-        return id;
+        return link;
     }
 
     public StringProperty getNameProperty() {
@@ -42,14 +42,17 @@ public final class Playlist {
     public StringProperty getSourcePropety() {
         return source;
     }
+
     @XmlElement(name = "name")
     public String getName() {
         return name.get();
     }
-    @XmlElement(name = "id")
-    public String getId() {
-        return id.get();
+
+    @XmlElement(name = "link")
+    public String getLink() {
+        return link.get();
     }
+
     @XmlElement(name = "source")
     public String getSource() {
         return source.get();
@@ -79,16 +82,13 @@ public final class Playlist {
         return 0;
     }
 
-    public void delete() {
-        this.name = new SimpleStringProperty("призрак");
-    }
 
     public void setName(String newName) {
         this.name.set(newName);
     }
 
-    public void setId(String newId) {
-        this.id.set(newId);
+    public void setLink(String newId) {
+        this.link.set(newId);
     }
 
     public void setSource(String newSource) {
@@ -97,59 +97,40 @@ public final class Playlist {
 
     public void setByLink(String link) {
         try {
-            if (link.contains("youtube") && link.contains("list")) {
+            if (link.contains("youtube")) {
                 this.source.set("youtube");
-                Pattern ytb = Pattern.compile("list=([^&]+)[&]?");
-                Matcher y = ytb.matcher(link);
-                y.find();
-                this.id.set(y.group(1));
+                Pattern yt = Pattern.compile(".+(list=.+)");
+                Matcher s = yt.matcher(link);
+                s.find();
+                this.link.set("https://www.youtube.com/embed/videoseries?" + s.group(1));
             } else if (link.contains("spotify")) {
                 this.source.set("spotify");
-                if (link.contains("album")) {
-                    Pattern spt = Pattern.compile("(album/[^?]+)[?]?");
-                    Matcher s = spt.matcher(link);
-                    s.find();
-                    this.id.set(s.group(1));
-                } else if (link.contains("playlist")) {
-                    Pattern spt = Pattern.compile("(playlist/[^?]+)[?]?");
-                    Matcher s = spt.matcher(link);
-                    s.find();
-                    this.id.set(s.group(1));
-                }
-            } else if (link.contains("yandex") && (link.contains("album") || link.contains("playlists"))) {
+                this.link.set(link.replace("https://open.spotify.com/", "https://open.spotify.com/embed/"));
+            } else if (link.contains("yandex")) {
                 this.source.set("yandex");
-                Pattern spt = Pattern.compile("users/.+|album/.+");
-                Matcher s = spt.matcher(link);
-                s.find();
-                this.id.set(s.group(0));
+                if (link.contains("album")) {
+                    this.link.set(link.replace("/album/", "/iframe/#album/"));
+                }
+                if (link.contains("playlists"))
+                    this.link.set(link.replace("/users/", "/iframe/#playlist/").replace("/playlists/", "/"));
             } else {
                 throw new NullPointerException("Некорректный ввод");
             }
-        } catch (IllegalStateException e) {
-            throw new NullPointerException();
+        } catch (IllegalStateException ignored) {
         }
         String newlink = link;
         if (this.getSource().equals("youtube") && link.contains("watch")) {
-            newlink = "https://www.youtube.com/playlist?list=" + this.getId();
+            newlink = this.getLink().replace("embed/videoseries", "playlist");
         }
         if (this.getSource().equals("spotify") && link.contains("?")) {
-            newlink = "https://open.spotify.com/" + this.getId();
+            newlink = link.replaceAll("\\?.*", "");
         }
         Document doc;
         String title = "";
         try {
-            try {
-                try {
-                    doc = Jsoup.connect(newlink).get();
-                    title = doc.title();
-                } catch (MalformedURLException e) {
-                    throw new NullPointerException("Некорректный ввод");
-                }
-            } catch (IOException e) {
-                throw new NullPointerException("Некорректный ввод");
-            }
-        }catch (IllegalArgumentException e) {
-            throw new NullPointerException("Некорректный ввод");
+            doc = Jsoup.connect(newlink).get();
+            title = doc.title();
+        } catch (Exception ignored) {
         }
         if (this.getSource().equals("youtube") && !title.isEmpty())
             this.name.set(title.substring(0, title.length() - 10));
@@ -159,28 +140,12 @@ public final class Playlist {
             if (title.contains("Spotify Playlist"))
                 this.name.set(title.substring(0, title.length() - 19));
         } else if (this.getSource().equals("yandex")) {
-            if (title.contains("плейлист на Яндекс.Музыке"))
+            if (title.contains("плейлист"))
                 this.name.set(title.substring(0, title.length() - 28));
-            if (title.contains("Слушать онлайн на Яндекс.Музыке"))
+            if (title.contains("Слушать онлайн"))
                 this.name.set(title.substring(0, title.length() - 32));
         } else {
             throw new NullPointerException("Некорректный ввод");
-        }
-    }
-
-    public String getHTML() {
-        if (this.getSource().equals("youtube")) {
-            return ("<html><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/videoseries?list=" + this.getId() + "\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe></html>");
-
-        }
-        if (this.getSource().equals("spotify")) {
-            return ("<html><iframe src=\"https://open.spotify.com/embed/" + this.getId() + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowtransparency=\"true\" allow=\"encrypted-media\"></iframe></html>");
-
-        } else {
-            if (this.getId().contains("playlists"))
-                return ("<html><iframe frameborder=\"0\"style=\"border:none;width:100%;height:100%;\"width=\"100%\"height=\"100%\"src=\"https://music.yandex.ru/iframe/#playlist" + this.getId().replaceAll("/playlists/", "/").substring(5) + "\"></iframe></html>");
-            else
-                return ("<html><iframe frameborder=\"0\" style=\"border:none;width:100%;height:100%;\" width=\"100%\" height=\"100%\" src=\"https://music.yandex.ru/iframe/#album" + this.getId().replaceAll("album/", "/") + "\"></iframe></html>");
         }
     }
 }
