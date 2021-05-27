@@ -2,6 +2,10 @@ package test;
 
 import org.junit.Test;
 import player.Playlist;
+import player.point;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -142,5 +146,14 @@ public class PlaylistTest {
     public void NotLinkTest6() {
         Playlist test = new Playlist();
         test.setByLink("magic");
+    }
+
+    @Test
+    public void pointTest() {
+        Set<Integer> set=new HashSet<>();
+        set.add(4);
+        set.add(5);
+        set.add(6);
+        System.out.println(point.maxSet(set));
     }
 }
